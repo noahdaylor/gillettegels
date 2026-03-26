@@ -1,0 +1,997 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>GilletteGels — Nail Artistry</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --blush:    #f5e6e0;
+      --rose:     #e8c4b8;
+      --mauve:    #c49a8a;
+      --deep:     #7d4f45;
+      --cream:    #fdf8f5;
+      --text:     #3a2a26;
+      --light:    #f9f0ec;
+      --gold:     #c9a96e;
+      --white:    #ffffff;
+      --shadow:   rgba(125,79,69,0.12);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--cream);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    /* ── NOISE TEXTURE OVERLAY ── */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none; z-index: 9999; opacity: 0.4;
+    }
+
+    /* ── NAVIGATION ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.4rem 4rem;
+      background: rgba(253,248,245,0.85);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(196,154,138,0.2);
+      z-index: 100;
+      transition: padding 0.3s;
+    }
+
+    .nav-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.5rem; font-weight: 300; letter-spacing: 0.06em;
+      color: var(--deep); text-decoration: none;
+    }
+    .nav-logo span { color: var(--gold); font-style: italic; }
+
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+    .nav-links a {
+      font-size: 0.8rem; font-weight: 500; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--text);
+      text-decoration: none; position: relative;
+      transition: color 0.25s;
+    }
+    .nav-links a::after {
+      content: ''; position: absolute; bottom: -3px; left: 0;
+      width: 0; height: 1px; background: var(--gold);
+      transition: width 0.3s;
+    }
+    .nav-links a:hover { color: var(--deep); }
+    .nav-links a:hover::after { width: 100%; }
+
+    .nav-cta {
+      background: var(--deep); color: var(--white) !important;
+      padding: 0.55rem 1.4rem !important;
+      border-radius: 2rem; letter-spacing: 0.1em !important;
+      transition: background 0.25s, transform 0.2s !important;
+    }
+    .nav-cta:hover { background: var(--mauve) !important; transform: translateY(-1px); }
+    .nav-cta::after { display: none !important; }
+
+    /* ── HAMBURGER ── */
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; }
+    .hamburger span { display: block; width: 24px; height: 1.5px; background: var(--deep); transition: 0.3s; }
+
+    /* ── HERO ── */
+    #home {
+      min-height: 100vh;
+      display: grid; grid-template-columns: 1fr 1fr;
+      align-items: center;
+      padding: 8rem 4rem 4rem;
+      gap: 4rem;
+      background: linear-gradient(135deg, var(--cream) 0%, var(--blush) 60%, var(--rose) 100%);
+      position: relative; overflow: hidden;
+    }
+
+    #home::after {
+      content: '';
+      position: absolute; top: -100px; right: -100px;
+      width: 500px; height: 500px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(232,196,184,0.5) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-text { position: relative; z-index: 1; }
+
+    .hero-eyebrow {
+      font-size: 0.75rem; font-weight: 500; letter-spacing: 0.22em;
+      text-transform: uppercase; color: var(--mauve);
+      margin-bottom: 1.2rem;
+      display: flex; align-items: center; gap: 0.8rem;
+    }
+    .hero-eyebrow::before {
+      content: ''; display: block; width: 30px; height: 1px; background: var(--mauve);
+    }
+
+    .hero-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(3rem, 6vw, 5.5rem);
+      font-weight: 300; line-height: 1.05;
+      color: var(--deep); margin-bottom: 1.8rem;
+    }
+    .hero-title em { font-style: italic; color: var(--mauve); }
+
+    .hero-subtitle {
+      font-size: 1rem; font-weight: 300; line-height: 1.8;
+      color: #6b4840; max-width: 420px; margin-bottom: 2.8rem;
+    }
+
+    .hero-buttons { display: flex; gap: 1rem; flex-wrap: wrap; }
+
+    .btn-primary {
+      background: var(--deep); color: var(--white);
+      padding: 0.9rem 2.2rem; border-radius: 3rem;
+      font-size: 0.8rem; font-weight: 500; letter-spacing: 0.12em;
+      text-transform: uppercase; text-decoration: none;
+      transition: background 0.25s, transform 0.2s, box-shadow 0.25s;
+      box-shadow: 0 4px 20px var(--shadow);
+    }
+    .btn-primary:hover { background: var(--mauve); transform: translateY(-2px); box-shadow: 0 8px 28px var(--shadow); }
+
+    .btn-secondary {
+      background: transparent; color: var(--deep);
+      padding: 0.9rem 2.2rem; border-radius: 3rem;
+      font-size: 0.8rem; font-weight: 500; letter-spacing: 0.12em;
+      text-transform: uppercase; text-decoration: none;
+      border: 1.5px solid var(--mauve);
+      transition: background 0.25s, color 0.25s, transform 0.2s;
+    }
+    .btn-secondary:hover { background: var(--blush); transform: translateY(-2px); }
+
+    .hero-image {
+      position: relative; display: flex; justify-content: center; align-items: center;
+    }
+    .hero-img-frame {
+      width: 380px; height: 480px;
+      border-radius: 200px 200px 160px 160px;
+      background: linear-gradient(160deg, var(--rose) 0%, var(--mauve) 100%);
+      position: relative; overflow: hidden;
+      box-shadow: 0 30px 80px rgba(125,79,69,0.25);
+    }
+
+    /* Decorative nail polish bottle SVG placeholder */
+    .hero-img-frame::after {
+      content: '✦';
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 5rem; color: rgba(255,255,255,0.3);
+    }
+
+    .hero-badge {
+      position: absolute; bottom: 30px; left: -20px;
+      background: var(--white); border-radius: 16px;
+      padding: 0.9rem 1.3rem;
+      box-shadow: 0 8px 30px var(--shadow);
+      display: flex; align-items: center; gap: 0.7rem;
+    }
+    .hero-badge-icon { font-size: 1.4rem; }
+    .hero-badge-text { font-size: 0.72rem; font-weight: 500; color: var(--deep); line-height: 1.4; }
+    .hero-badge-text strong { display: block; font-size: 1rem; }
+
+    .floating-tag {
+      position: absolute; top: 40px; right: -10px;
+      background: var(--gold); color: var(--white);
+      border-radius: 12px; padding: 0.6rem 1rem;
+      font-size: 0.75rem; font-weight: 500; letter-spacing: 0.08em;
+      box-shadow: 0 4px 16px rgba(201,169,110,0.4);
+      animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float { 0%,100%{ transform: translateY(0); } 50%{ transform: translateY(-8px); } }
+
+    /* ── SECTION COMMON ── */
+    section { padding: 6rem 4rem; }
+    .section-label {
+      font-size: 0.72rem; font-weight: 500; letter-spacing: 0.22em;
+      text-transform: uppercase; color: var(--mauve);
+      margin-bottom: 0.8rem;
+      display: flex; align-items: center; gap: 0.8rem;
+    }
+    .section-label::before { content:''; display:block; width:24px; height:1px; background:var(--mauve); }
+    .section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2rem, 4vw, 3.2rem); font-weight: 300;
+      color: var(--deep); line-height: 1.15; margin-bottom: 1.5rem;
+    }
+    .section-title em { font-style: italic; color: var(--mauve); }
+
+    /* ── ABOUT ── */
+    #about {
+      background: var(--white);
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 6rem; align-items: center;
+    }
+
+    .about-img-wrap {
+      position: relative;
+    }
+    .about-img-main {
+      width: 100%; aspect-ratio: 3/4;
+      border-radius: 120px 120px 60px 60px;
+      background: linear-gradient(180deg, var(--blush) 0%, var(--rose) 100%);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 4rem; color: rgba(125,79,69,0.2);
+      box-shadow: 0 20px 60px var(--shadow);
+      overflow: hidden;
+    }
+    .about-img-main img {
+      width: 100%; height: 100%; object-fit: cover;
+    }
+    .about-accent {
+      position: absolute; bottom: -20px; right: -20px;
+      width: 140px; height: 140px;
+      border-radius: 50%;
+      background: var(--blush);
+      border: 8px solid var(--white);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.75rem; font-weight: 400; letter-spacing: 0.1em;
+      text-align: center; line-height: 1.6;
+      color: var(--deep);
+      box-shadow: 0 8px 24px var(--shadow);
+    }
+
+    .about-text p {
+      font-size: 1rem; font-weight: 300; line-height: 1.9;
+      color: #5a3c36; margin-bottom: 1.2rem;
+    }
+
+    .about-stats {
+      display: flex; gap: 2.5rem; margin-top: 2.5rem;
+      padding-top: 2rem; border-top: 1px solid var(--blush);
+    }
+    .stat-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.5rem; font-weight: 300; color: var(--deep); line-height: 1;
+    }
+    .stat-label {
+      font-size: 0.75rem; font-weight: 400; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--mauve); margin-top: 0.3rem;
+    }
+
+    /* ── SERVICES ── */
+    #services {
+      background: linear-gradient(160deg, var(--cream) 0%, var(--blush) 100%);
+      text-align: center;
+    }
+    .services-intro { max-width: 540px; margin: 0 auto 3.5rem; }
+    .services-intro .section-label { justify-content: center; }
+    .services-intro .section-label::before { display:none; }
+
+    .services-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 1.5rem; max-width: 1100px; margin: 0 auto;
+    }
+
+    .service-card {
+      background: var(--white); border-radius: 24px;
+      padding: 2.5rem 1.8rem;
+      box-shadow: 0 4px 24px var(--shadow);
+      transition: transform 0.3s, box-shadow 0.3s;
+      text-align: center; position: relative; overflow: hidden;
+    }
+    .service-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      background: linear-gradient(90deg, var(--rose), var(--gold));
+    }
+    .service-card:hover { transform: translateY(-6px); box-shadow: 0 16px 44px var(--shadow); }
+
+    .service-icon {
+      font-size: 2.2rem; margin-bottom: 1.2rem; display: block;
+    }
+    .service-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.3rem; font-weight: 400; color: var(--deep);
+      margin-bottom: 0.7rem;
+    }
+    .service-desc {
+      font-size: 0.83rem; font-weight: 300; line-height: 1.7; color: #7a5850;
+    }
+    .service-price {
+      margin-top: 1.2rem; padding-top: 1rem;
+      border-top: 1px solid var(--blush);
+      font-size: 0.8rem; font-weight: 500; letter-spacing: 0.06em;
+      color: var(--gold);
+    }
+
+    /* ── GALLERY / MY WORK ── */
+    #work { background: var(--white); }
+
+    .work-header { max-width: 580px; margin-bottom: 3rem; }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: auto;
+      gap: 1.2rem;
+    }
+
+    .gallery-item {
+      border-radius: 20px; overflow: hidden;
+      position: relative; cursor: pointer;
+      background: var(--blush);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .gallery-item:hover { transform: scale(1.02); box-shadow: 0 12px 40px var(--shadow); }
+    .gallery-item:nth-child(1) { grid-row: span 2; }
+    .gallery-item:nth-child(4) { grid-column: span 2; }
+
+    .gallery-placeholder {
+      width: 100%; aspect-ratio: 1;
+      display: flex; align-items: center; justify-content: center;
+      flex-direction: column; gap: 0.5rem;
+      color: var(--mauve); font-size: 2.5rem;
+    }
+    .gallery-item:nth-child(1) .gallery-placeholder { aspect-ratio: unset; height: 100%; min-height: 400px; }
+    .gallery-item:nth-child(4) .gallery-placeholder { aspect-ratio: 2/1; }
+
+    .gallery-placeholder span {
+      font-size: 0.75rem; font-weight: 400; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--mauve); opacity: 0.7;
+    }
+
+    .gallery-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(0deg, rgba(125,79,69,0.7) 0%, transparent 60%);
+      opacity: 0; transition: opacity 0.3s;
+      display: flex; align-items: flex-end; padding: 1.2rem;
+    }
+    .gallery-item:hover .gallery-overlay { opacity: 1; }
+    .gallery-tag {
+      background: var(--white); color: var(--deep);
+      font-size: 0.72rem; font-weight: 500; letter-spacing: 0.08em;
+      padding: 0.35rem 0.8rem; border-radius: 2rem;
+      text-transform: uppercase;
+    }
+
+    /* Gallery filters */
+    .gallery-filters {
+      display: flex; gap: 0.8rem; margin-bottom: 2rem; flex-wrap: wrap;
+    }
+    .filter-btn {
+      padding: 0.45rem 1.2rem; border-radius: 2rem;
+      border: 1.5px solid var(--rose); background: transparent;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.78rem; font-weight: 500; letter-spacing: 0.08em;
+      text-transform: uppercase; color: var(--text); cursor: pointer;
+      transition: all 0.2s;
+    }
+    .filter-btn.active, .filter-btn:hover {
+      background: var(--deep); border-color: var(--deep); color: var(--white);
+    }
+
+    /* ── TESTIMONIALS ── */
+    #testimonials {
+      background: var(--deep);
+      color: var(--white);
+      text-align: center;
+    }
+    #testimonials .section-label { color: var(--rose); justify-content: center; }
+    #testimonials .section-label::before { background: var(--rose); display: none; }
+    #testimonials .section-title { color: var(--white); }
+
+    .testimonials-track {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem; max-width: 1100px; margin: 0 auto;
+    }
+
+    .testimonial-card {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 20px; padding: 2rem;
+      text-align: left; backdrop-filter: blur(8px);
+    }
+
+    .stars { color: var(--gold); font-size: 1rem; margin-bottom: 1rem; letter-spacing: 0.1em; }
+
+    .testimonial-text {
+      font-size: 0.95rem; font-weight: 300; line-height: 1.85;
+      color: rgba(255,255,255,0.8); margin-bottom: 1.5rem;
+      font-style: italic;
+    }
+
+    .testimonial-author { display: flex; align-items: center; gap: 0.8rem; }
+    .author-avatar {
+      width: 40px; height: 40px; border-radius: 50%;
+      background: var(--mauve); display: flex; align-items: center;
+      justify-content: center; font-size: 1rem;
+      color: var(--white); font-weight: 500; flex-shrink: 0;
+    }
+    .author-name { font-size: 0.85rem; font-weight: 500; color: var(--white); }
+    .author-sub { font-size: 0.72rem; color: var(--rose); margin-top: 0.1rem; }
+
+    /* ── BOOKING ── */
+    #booking {
+      background: linear-gradient(135deg, var(--cream) 0%, var(--blush) 100%);
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 6rem; align-items: start;
+    }
+
+    .booking-info { padding-top: 1rem; }
+    .booking-info p {
+      font-size: 0.95rem; font-weight: 300; line-height: 1.9;
+      color: #6b4840; margin-bottom: 1.5rem;
+    }
+
+    .booking-details {
+      display: flex; flex-direction: column; gap: 1rem; margin-top: 2rem;
+    }
+    .booking-detail {
+      display: flex; align-items: center; gap: 0.9rem;
+      font-size: 0.88rem; color: var(--text);
+    }
+    .booking-detail-icon {
+      width: 40px; height: 40px; border-radius: 50%;
+      background: var(--white); display: flex; align-items: center;
+      justify-content: center; font-size: 1.1rem;
+      box-shadow: 0 2px 12px var(--shadow); flex-shrink: 0;
+    }
+
+    /* Form */
+    .booking-form {
+      background: var(--white); border-radius: 28px;
+      padding: 2.8rem; box-shadow: 0 16px 60px var(--shadow);
+    }
+    .form-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.8rem; font-weight: 300; color: var(--deep);
+      margin-bottom: 0.5rem;
+    }
+    .form-subtitle {
+      font-size: 0.82rem; color: var(--mauve); margin-bottom: 2rem;
+      letter-spacing: 0.05em;
+    }
+
+    .form-group { margin-bottom: 1.2rem; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+    label {
+      display: block; font-size: 0.75rem; font-weight: 500;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--mauve); margin-bottom: 0.5rem;
+    }
+
+    input, select, textarea {
+      width: 100%; padding: 0.9rem 1.1rem;
+      border: 1.5px solid var(--blush);
+      border-radius: 12px;
+      background: var(--cream);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem; color: var(--text);
+      transition: border-color 0.2s, box-shadow 0.2s;
+      outline: none; appearance: none;
+    }
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--mauve);
+      box-shadow: 0 0 0 3px rgba(196,154,138,0.15);
+    }
+    textarea { resize: vertical; min-height: 100px; }
+
+    .form-submit {
+      width: 100%; padding: 1rem;
+      background: var(--deep); color: var(--white);
+      border: none; border-radius: 3rem;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.85rem; font-weight: 500; letter-spacing: 0.12em;
+      text-transform: uppercase; cursor: pointer;
+      transition: background 0.25s, transform 0.2s, box-shadow 0.25s;
+      box-shadow: 0 4px 20px var(--shadow);
+      margin-top: 0.5rem;
+    }
+    .form-submit:hover { background: var(--mauve); transform: translateY(-2px); box-shadow: 0 8px 28px var(--shadow); }
+
+    .form-note {
+      font-size: 0.75rem; color: var(--mauve); text-align: center;
+      margin-top: 1rem; line-height: 1.6;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--text);
+      color: rgba(255,255,255,0.6);
+      padding: 3.5rem 4rem;
+      display: grid; grid-template-columns: 1.5fr 1fr 1fr;
+      gap: 3rem;
+    }
+
+    .footer-brand {}
+    .footer-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.6rem; font-weight: 300;
+      color: var(--white); margin-bottom: 0.8rem;
+    }
+    .footer-logo span { color: var(--gold); font-style: italic; }
+    .footer-tagline {
+      font-size: 0.83rem; line-height: 1.7; max-width: 260px;
+      margin-bottom: 1.5rem;
+    }
+
+    .social-links { display: flex; gap: 0.8rem; }
+    .social-link {
+      width: 38px; height: 38px; border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.2);
+      display: flex; align-items: center; justify-content: center;
+      color: rgba(255,255,255,0.6); text-decoration: none;
+      font-size: 0.9rem; transition: all 0.2s;
+    }
+    .social-link:hover {
+      border-color: var(--gold); color: var(--gold);
+      background: rgba(201,169,110,0.1);
+    }
+
+    .footer-col h4 {
+      font-size: 0.72rem; font-weight: 500; letter-spacing: 0.18em;
+      text-transform: uppercase; color: var(--white);
+      margin-bottom: 1.2rem;
+    }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
+    .footer-col a {
+      font-size: 0.85rem; color: rgba(255,255,255,0.55);
+      text-decoration: none; transition: color 0.2s;
+    }
+    .footer-col a:hover { color: var(--gold); }
+
+    .footer-bottom {
+      grid-column: 1/-1;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      padding-top: 1.5rem;
+      display: flex; justify-content: space-between;
+      font-size: 0.77rem; color: rgba(255,255,255,0.35);
+    }
+
+    /* ── CONFIRMATION MESSAGE ── */
+    .form-success {
+      display: none; text-align: center; padding: 2rem 0;
+    }
+    .form-success.show { display: block; }
+    .form-success-icon { font-size: 3rem; margin-bottom: 1rem; }
+    .form-success h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.8rem; font-weight: 300; color: var(--deep);
+      margin-bottom: 0.5rem;
+    }
+    .form-success p { font-size: 0.9rem; color: var(--mauve); }
+
+    /* ── SCROLL ANIMATIONS ── */
+    .reveal {
+      opacity: 0; transform: translateY(30px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* ── MOBILE ── */
+    @media (max-width: 900px) {
+      nav { padding: 1.2rem 1.5rem; }
+      .nav-links { display: none; flex-direction: column; position: fixed;
+        top: 0; left: 0; right: 0; background: var(--cream); padding: 5rem 2rem 2rem;
+        box-shadow: 0 8px 30px var(--shadow); gap: 1.5rem; }
+      .nav-links.open { display: flex; }
+      .hamburger { display: flex; }
+
+      #home { grid-template-columns: 1fr; padding: 7rem 1.5rem 3rem; text-align: center; }
+      .hero-subtitle { margin: 0 auto 2rem; }
+      .hero-buttons { justify-content: center; }
+      .hero-image { display: none; }
+
+      #about { grid-template-columns: 1fr; gap: 3rem; padding: 4rem 1.5rem; }
+      .about-img-wrap { max-width: 320px; margin: 0 auto; }
+
+      .services-grid { grid-template-columns: 1fr 1fr; padding: 0; }
+
+      .gallery-grid { grid-template-columns: 1fr 1fr; }
+      .gallery-item:nth-child(1) { grid-row: span 1; }
+      .gallery-item:nth-child(4) { grid-column: span 1; }
+      .gallery-item:nth-child(1) .gallery-placeholder { min-height: unset; }
+      .gallery-item:nth-child(4) .gallery-placeholder { aspect-ratio: 1; }
+
+      .testimonials-track { grid-template-columns: 1fr; }
+
+      #booking { grid-template-columns: 1fr; gap: 3rem; padding: 4rem 1.5rem; }
+
+      section { padding: 4rem 1.5rem; }
+
+      footer { grid-template-columns: 1fr; padding: 3rem 1.5rem; gap: 2rem; }
+      .footer-bottom { flex-direction: column; gap: 0.5rem; }
+
+      .form-row { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 560px) {
+      .services-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── NAVIGATION ── -->
+<nav id="navbar">
+  <a href="#home" class="nav-logo">Gillette<span>Gels</span></a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#home">Home</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#work">My Work</a></li>
+    <li><a href="#booking" class="nav-cta">Book Now</a></li>
+  </ul>
+  <button class="hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- ── HERO ── -->
+<section id="home">
+  <div class="hero-text reveal">
+    <div class="hero-eyebrow">Nail Artistry Studio</div>
+    <h1 class="hero-title">
+      Where nails become<br><em>tiny works</em><br>of art
+    </h1>
+    <p class="hero-subtitle">
+      Handcrafted nail designs tailored to your style — from minimalist elegance to bold, intricate art. Every set is a labour of love.
+    </p>
+    <div class="hero-buttons">
+      <a href="#booking" class="btn-primary">Book an Appointment</a>
+      <a href="#work" class="btn-secondary">View My Work</a>
+    </div>
+  </div>
+  <div class="hero-image reveal">
+    <div class="hero-img-frame">
+      <!-- Replace with <img src="your-photo.jpg" alt="Nail Art"> -->
+    </div>
+    <div class="hero-badge">
+      <div class="hero-badge-icon">💅</div>
+      <div class="hero-badge-text"><strong>200+</strong>Happy Clients</div>
+    </div>
+    <div class="floating-tag">✦ Fully Insured</div>
+  </div>
+</section>
+
+<!-- ── ABOUT ── -->
+<section id="about">
+  <div class="about-img-wrap reveal">
+    <div class="about-img-main">
+      <!-- Replace with <img src="your-portrait.jpg" alt="Your Name"> -->
+      💅
+    </div>
+    <div class="about-accent">
+      Est.<br>2021<br>✦
+    </div>
+  </div>
+  <div class="about-text reveal">
+    <div class="section-label">About Me</div>
+    <h2 class="section-title">Hi, I'm <em>Sophia</em> — your nail artist</h2>
+    <p>
+      Welcome! I'm a certified nail technician with a passion for transforming nails into wearable art. Based locally, I offer a relaxing, one-on-one studio experience where your comfort and creativity always come first.
+    </p>
+    <p>
+      My journey began with a love for fine art — and I found my canvas in miniature. Each set I create is completely bespoke, designed around your personality, lifestyle, and vision.
+    </p>
+    <p>
+      I use only professional-grade, cruelty-free products and stay up to date with the latest techniques through ongoing education.
+    </p>
+    <div class="about-stats">
+      <div>
+        <div class="stat-num">200+</div>
+        <div class="stat-label">Happy Clients</div>
+      </div>
+      <div>
+        <div class="stat-num">4+</div>
+        <div class="stat-label">Years Experience</div>
+      </div>
+      <div>
+        <div class="stat-num">100%</div>
+        <div class="stat-label">Cruelty-Free</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── SERVICES ── -->
+<section id="services">
+  <div class="services-intro reveal">
+    <div class="section-label">What I Offer</div>
+    <h2 class="section-title">Services & <em>Pricing</em></h2>
+    <p style="font-size:0.95rem;font-weight:300;line-height:1.8;color:#6b4840;">
+      Every service is personalised to you. Prices below are starting from — final cost depends on design complexity.
+    </p>
+  </div>
+  <div class="services-grid">
+    <div class="service-card reveal">
+      <span class="service-icon">💅</span>
+      <div class="service-name">Gel Sets</div>
+      <p class="service-desc">Long-lasting gel colour with glossy or matte finish. Perfect for everyday wear with 2–3 week durability.</p>
+      <div class="service-price">From £35</div>
+    </div>
+    <div class="service-card reveal">
+      <span class="service-icon">✨</span>
+      <div class="service-name">Acrylic Extensions</div>
+      <p class="service-desc">Custom length and shape with acrylic sculpting. Ideal for added strength and length.</p>
+      <div class="service-price">From £50</div>
+    </div>
+    <div class="service-card reveal">
+      <span class="service-icon">🎨</span>
+      <div class="service-name">Nail Art & Design</div>
+      <p class="service-desc">Hand-painted florals, geometric patterns, 3D embellishments, chrome, and more. Fully bespoke.</p>
+      <div class="service-price">From £15 add-on</div>
+    </div>
+    <div class="service-card reveal">
+      <span class="service-icon">🌸</span>
+      <div class="service-name">Manicure & Pedi</div>
+      <p class="service-desc">Classic or spa manicures and pedicures including cuticle care, massage, and your choice of polish.</p>
+      <div class="service-price">From £28</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── GALLERY ── -->
+<section id="work">
+  <div class="work-header reveal">
+    <div class="section-label">Portfolio</div>
+    <h2 class="section-title">My <em>Work</em></h2>
+    <p style="font-size:0.95rem;font-weight:300;line-height:1.8;color:#6b4840;max-width:480px;">
+      A selection of recent sets. Each design is one-of-a-kind, crafted entirely by hand. Follow me on Instagram for daily inspo.
+    </p>
+  </div>
+
+  <div class="gallery-filters reveal">
+    <button class="filter-btn active">All</button>
+    <button class="filter-btn">Gel</button>
+    <button class="filter-btn">Nail Art</button>
+    <button class="filter-btn">Acrylics</button>
+    <button class="filter-btn">Press-Ons</button>
+  </div>
+
+  <div class="gallery-grid">
+    <!-- Replace gallery-placeholder divs with <img> tags -->
+    <div class="gallery-item reveal">
+      <div class="gallery-placeholder" style="background:linear-gradient(135deg,#f5e6e0,#e8c4b8);">🌸<span>Floral Gel Set</span></div>
+      <div class="gallery-overlay"><span class="gallery-tag">Nail Art</span></div>
+    </div>
+    <div class="gallery-item reveal">
+      <div class="gallery-placeholder" style="background:linear-gradient(135deg,#e8c4b8,#c49a8a);">✨<span>Chrome Finish</span></div>
+      <div class="gallery-overlay"><span class="gallery-tag">Gel</span></div>
+    </div>
+    <div class="gallery-item reveal">
+      <div class="gallery-placeholder" style="background:linear-gradient(135deg,#fde8d8,#f5c4a8);">🎨<span>Abstract Art</span></div>
+      <div class="gallery-overlay"><span class="gallery-tag">Nail Art</span></div>
+    </div>
+    <div class="gallery-item reveal">
+      <div class="gallery-placeholder" style="background:linear-gradient(135deg,#f0e0f5,#d4a8e8);aspect-ratio:2/1;">💜<span>Ombre Press-On Set</span></div>
+      <div class="gallery-overlay"><span class="gallery-tag">Press-Ons</span></div>
+    </div>
+    <div class="gallery-item reveal">
+      <div class="gallery-placeholder" style="background:linear-gradient(135deg,#d4e8f5,#a8c8e8);">❄️<span>Winter Set</span></div>
+      <div class="gallery-overlay"><span class="gallery-tag">Acrylics</span></div>
+    </div>
+    <div class="gallery-item reveal">
+      <div class="gallery-placeholder" style="background:linear-gradient(135deg,#f5f0d4,#e8d8a8);">🌿<span>Botanical Design</span></div>
+      <div class="gallery-overlay"><span class="gallery-tag">Nail Art</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ── TESTIMONIALS ── -->
+<section id="testimonials">
+  <div class="section-label" style="justify-content:center;">Client Love</div>
+  <h2 class="section-title" style="margin-bottom:3rem;">What they <em style="color:var(--rose);">say</em></h2>
+
+  <div class="testimonials-track">
+    <div class="testimonial-card reveal">
+      <div class="stars">★★★★★</div>
+      <p class="testimonial-text">"Sophia is an absolute gem! She took my vague Pinterest board and turned it into the most beautiful set I've ever had. Already booked my next appointment."</p>
+      <div class="testimonial-author">
+        <div class="author-avatar">E</div>
+        <div>
+          <div class="author-name">Emily R.</div>
+          <div class="author-sub">Gel Set with Nail Art</div>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial-card reveal">
+      <div class="stars">★★★★★</div>
+      <p class="testimonial-text">"The most relaxing nail experience I've ever had. Incredibly clean, professional studio and my acrylics lasted nearly 4 weeks. Will not go anywhere else!"</p>
+      <div class="testimonial-author">
+        <div class="author-avatar">J</div>
+        <div>
+          <div class="author-name">Jasmine L.</div>
+          <div class="author-sub">Acrylic Extensions</div>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial-card reveal">
+      <div class="stars">★★★★★</div>
+      <p class="testimonial-text">"I've been coming to Sophia for over a year now. She consistently delivers stunning work and really listens to what you want. Genuinely talented artist."</p>
+      <div class="testimonial-author">
+        <div class="author-avatar">M</div>
+        <div>
+          <div class="author-name">Mia K.</div>
+          <div class="author-sub">Regular Client</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── BOOKING ── -->
+<section id="booking">
+  <div class="booking-info reveal">
+    <div class="section-label">Appointments</div>
+    <h2 class="section-title">Book With <em>Me</em></h2>
+    <p>
+      Ready to treat yourself? Fill in the form and I'll get back to you within 24 hours to confirm your appointment and discuss your design ideas.
+    </p>
+    <p>
+      Please note: a £10 deposit is required to secure your booking, deducted from your final balance on the day.
+    </p>
+    <div class="booking-details">
+      <div class="booking-detail">
+        <div class="booking-detail-icon">📍</div>
+        <span><strong>Location:</strong> Home studio, [Your Town] — address sent on confirmation</span>
+      </div>
+      <div class="booking-detail">
+        <div class="booking-detail-icon">🕐</div>
+        <span><strong>Hours:</strong> Tue–Sat, 9am–6pm</span>
+      </div>
+      <div class="booking-detail">
+        <div class="booking-detail-icon">📱</div>
+        <span><strong>Instagram:</strong> @gillettegels</span>
+      </div>
+      <div class="booking-detail">
+        <div class="booking-detail-icon">✉️</div>
+        <span><strong>Email:</strong> hello@gillettegels.com</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="booking-form reveal">
+    <div id="bookingFormWrap">
+      <div class="form-title">Request a Booking</div>
+      <div class="form-subtitle">I'll confirm within 24 hours ✦</div>
+
+      <form id="bookingForm" onsubmit="submitForm(event)">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="fname">First Name</label>
+            <input type="text" id="fname" placeholder="Jane" required />
+          </div>
+          <div class="form-group">
+            <label for="lname">Last Name</label>
+            <input type="text" id="lname" placeholder="Smith" required />
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <input type="email" id="email" placeholder="jane@example.com" required />
+        </div>
+        <div class="form-group">
+          <label for="phone">Phone Number</label>
+          <input type="tel" id="phone" placeholder="07700 000000" />
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="service">Service</label>
+            <select id="service" required>
+              <option value="" disabled selected>Choose a service…</option>
+              <option>Gel Set</option>
+              <option>Acrylic Extensions</option>
+              <option>Nail Art Add-on</option>
+              <option>Manicure</option>
+              <option>Pedicure</option>
+              <option>Press-On Set</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="date">Preferred Date</label>
+            <input type="date" id="date" required />
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="inspo">Design Inspo / Notes</label>
+          <textarea id="inspo" placeholder="Describe your ideal design, share colour preferences, or paste an inspo link…"></textarea>
+        </div>
+        <button type="submit" class="form-submit">Send Booking Request ✦</button>
+        <p class="form-note">By submitting you agree to the £10 deposit policy. No walk-ins accepted.</p>
+      </form>
+    </div>
+
+    <div class="form-success" id="formSuccess">
+      <div class="form-success-icon">🌸</div>
+      <h3>Request Received!</h3>
+      <p>Thank you for booking with GilletteGels.<br>I'll be in touch within 24 hours to confirm. ✦</p>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-brand">
+    <div class="footer-logo">Gillette<span>Gels</span></div>
+    <p class="footer-tagline">Handcrafted nail artistry for those who love the finer details. Based in [Your Town].</p>
+    <div class="social-links">
+      <a class="social-link" href="#" aria-label="Instagram">📷</a>
+      <a class="social-link" href="#" aria-label="TikTok">🎵</a>
+      <a class="social-link" href="#" aria-label="Facebook">📘</a>
+    </div>
+  </div>
+  <div class="footer-col">
+    <h4>Navigate</h4>
+    <ul>
+      <li><a href="#home">Home</a></li>
+      <li><a href="#about">About Me</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#work">My Work</a></li>
+      <li><a href="#booking">Book Now</a></li>
+    </ul>
+  </div>
+  <div class="footer-col">
+    <h4>Services</h4>
+    <ul>
+      <li><a href="#services">Gel Sets</a></li>
+      <li><a href="#services">Acrylic Extensions</a></li>
+      <li><a href="#services">Nail Art</a></li>
+      <li><a href="#services">Manicures</a></li>
+      <li><a href="#services">Press-Ons</a></li>
+    </ul>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2025 GilletteGels. All rights reserved.</span>
+    <span>Made with 💅 for nail lovers</span>
+  </div>
+</footer>
+
+<script>
+  // ── HAMBURGER MENU ──
+  const hamburger = document.getElementById('hamburger');
+  const navLinks = document.getElementById('navLinks');
+  hamburger.addEventListener('click', () => navLinks.classList.toggle('open'));
+  navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => navLinks.classList.remove('open')));
+
+  // ── SCROLL REVEAL ──
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 60);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  reveals.forEach(el => observer.observe(el));
+
+  // ── GALLERY FILTERS ──
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    });
+  });
+
+  // ── BOOKING FORM ──
+  function submitForm(e) {
+    e.preventDefault();
+    document.getElementById('bookingFormWrap').style.display = 'none';
+    document.getElementById('formSuccess').classList.add('show');
+  }
+
+  // ── SET DATE MIN ──
+  const dateInput = document.getElementById('date');
+  if (dateInput) {
+    const today = new Date().toISOString().split('T')[0];
+    dateInput.setAttribute('min', today);
+  }
+</script>
+</body>
+</html>
